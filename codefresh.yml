@@ -9,10 +9,11 @@ steps:
     dockerfile:
       content: |-
         FROM node:11-alpine
+        
         WORKDIR /app
         
         RUN curl -LO https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 && \
-        	chmod a+x test-reporter-latest-linux-amd64 && \
+          chmod a+x test-reporter-latest-linux-amd64 && \
           mv test-reporter-latest-linux-amd64 /usr/local/bin/cc-test-reporter
         
         COPY ./ /app
