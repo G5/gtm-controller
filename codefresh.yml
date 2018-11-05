@@ -1,0 +1,28 @@
+version: '1.0'
+steps:
+  BuildingDockerImage:
+    title: Building Docker Image
+    type: build
+    image_name: gtm-controller
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}'
+    working_directory: ./
+    dockerfile:
+      content: |-
+        FROM node:11-alpine
+        WORKDIR /app
+        
+        RUN curl -LO https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 && \
+        	chmod a+x test-reporter-latest-linux-amd64 && \
+          mv test-reporter-latest-linux-amd64 /usr/local/bin/cc-test-reporter
+        
+        COPY ./ /app
+  RunningUnitTests:
+    title: Running Unit Tests
+    working_directory: ${{main_clone}}
+    image: ${{BuildingDockerImage}}
+    environment:
+      - GIT_BRANCH=${{CF_BRANCH}}
+    commands:
+      - cc-test-reporter before-build
+      - npm run test:coverage
+      - cc-test-reporter after-build --exit-code $?
