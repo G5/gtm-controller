@@ -10,7 +10,6 @@ steps:
       content: |-
         FROM node:11-alpine
         RUN apk add --no-cache curl
-        
         WORKDIR /app
         
         RUN curl -LO https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 && \
@@ -18,6 +17,7 @@ steps:
           mv test-reporter-latest-linux-amd64 /usr/local/bin/cc-test-reporter
         
         COPY package.json package-lock.json /app/
+        RUN npm i -g npm
         RUN npm i
         COPY ./ /app
   RunningUnitTests:
