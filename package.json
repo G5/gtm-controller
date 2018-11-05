@@ -1,0 +1,27 @@
+{
+  "name": "@g5/gtm-controller",
+  "version": "1.0.0",
+  "description": "Modular GTM scripts with unit tests, modern JavaScript, backed by the power of Git.",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/G5/gtm-controller.git"
+  },
+  "keywords": [
+    "GTM",
+    "Google",
+    "Tag",
+    "Manager",
+    "Script",
+    "Manager"
+  ],
+  "author": "G5 <https://github.com/g5/>, Cody Swartz <https://github.com/ctsstc>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/G5/gtm-controller/issues"
+  },
+  "homepage": "https://github.com/G5/gtm-controller#readme"
+}
