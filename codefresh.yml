@@ -17,7 +17,7 @@ steps:
           mv test-reporter-latest-linux-amd64 /usr/local/bin/cc-test-reporter
         
         COPY package.json package-lock.json /app/
-        RUN npm i -g npm
+        RUN npm i -g cross-env
         RUN npm i
         COPY ./ /app
   RunningUnitTests:
