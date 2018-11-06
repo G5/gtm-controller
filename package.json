@@ -5,7 +5,9 @@
   "main": "./src/index.ts",
   "scripts": {
     "test": "jest",
-    "test:coverage": "cross-env JEST_COVERAGE=true jest"
+    "test:coverage": "cross-env JEST_COVERAGE=true jest",
+    "test:watch": "jest --watch",
+    "test:watch:coverage": "cross-env JEST_COVERAGE=true jest --watch"
   },
   "repository": {
     "type": "git",
