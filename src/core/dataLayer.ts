@@ -1,11 +1,11 @@
-import { Constants } from "../variables/constants";
+import Constants from "../variables/constants";
 
 const { dataLayer: DL } = Constants;
 
 class DataLayer {
   public static push(...args: any): number {
     DL.push(...args);
-    if (Constants.gtmControllerDebug) {
+    if (Constants.debugging) {
       console.log(...args);
     }
     return DL.length - 1;

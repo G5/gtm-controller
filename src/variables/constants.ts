@@ -6,13 +6,13 @@ declare global {
   }
 }
 
-export class Constants {
+export default class Constants {
   public static get dataLayer() {
     window.dataLayer = window.dataLayer || [];
     return window.dataLayer;
   }
 
-  public static get gtmControllerDebug() {
+  public static get debugging() {
     return window.gtmControllerDebug;
   }
 }
