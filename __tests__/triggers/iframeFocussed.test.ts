@@ -1,4 +1,4 @@
-import IframeFocusTrigger from '../../src/triggers/iframeFocussed';
+import IframeFocusTrigger from '../../src/triggers/iframeFocusTrigger';
 import WindowLoader from '../helpers/windowLoader';
 import formTemplate from "../templates/partials/form";
 import iframeTemplate from '../templates/partials/iframe';
