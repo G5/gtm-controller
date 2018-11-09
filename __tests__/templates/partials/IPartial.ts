@@ -1,5 +1,5 @@
 
-interface IPartial {
+export default interface IPartial {
   type: string;
   innerHtml: string;
 }

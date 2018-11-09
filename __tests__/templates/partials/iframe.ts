@@ -1,3 +1,5 @@
+import IPartial from "./IPartial";
+
 export default {
   type: 'div',
   innerHtml: `

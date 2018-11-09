@@ -1,3 +1,5 @@
+import IPartial from '../templates/partials/IPartial';
+
 export default class WindowLoader {
   public static loadElements(...elements: IPartial[]) {
     for (const elem of elements) {
