@@ -8,12 +8,14 @@ class ExtendsTrigger extends Trigger {
 
 describe('Extends Trigger with Multiple Subscriptions', () => {
   let triggerable: ExtendsTrigger;
-  const func1 = jest.fn();
-  const func2 = jest.fn();
+  let func1: jest.Mock;
+  let func2: jest.Mock;
   const data = {
     information: 'Something important has happened'
   };
   beforeEach(() => {
+    func1 = jest.fn();
+    func2 = jest.fn();
     triggerable = new ExtendsTrigger();
     triggerable.subscribe(func1);
     triggerable.subscribe(func2);
