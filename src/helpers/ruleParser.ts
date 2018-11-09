@@ -11,21 +11,29 @@ export default class RuleParser {
     });
   }
 
+  private static hasQueryOrHash(url: string) {
+    const queryIndex = url.indexOf('\\?');
+    const hashIndex = url.indexOf('#');
+    return {
+      query: queryIndex > -1,
+      queryIndex,
+      hash: hashIndex > -1,
+      hashIndex
+    };
+  }
+
   private static firstQueryOrHashIndex(url: string) {
-    const hasQuery = url.indexOf('\\?');
-    const hasHash = url.indexOf('#');
+    const { query, queryIndex, hash, hashIndex } = this.hasQueryOrHash(url);
     let index = -1;
 
-    // Does it have a query or hash
-    if (hasQuery > -1 || hasHash > -1) {
-      // Does it have both
-      if (hasQuery > -1 && hasHash > -1) {
+    if (query || hash) {
+      if (query && hash) {
         // Which occurs first
-        index = Math.min(hasQuery, hasHash);
+        index = Math.min(queryIndex, hashIndex);
       }
       else {
         // It only has one or the other
-        index = hasQuery > -1 ? hasQuery : hasHash;
+        index = query ? queryIndex : hashIndex;
       }
     }
 
