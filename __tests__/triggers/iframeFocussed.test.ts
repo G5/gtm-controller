@@ -131,20 +131,6 @@ describe("iframe event tracking", () => {
       delete window.gtmControllerDebug; // not sure why this isn't working in the global beforeEach
       done();
     });
-
-    // IET.subscribe(() => {
-    //   const args = mockedConsole.mock.calls[0];
-    //   expect(args).toEqual([
-    //     'Clicked iframe src:',
-    //     'https://www.w3schools.com/',
-    //     'Element:',
-    //     iframe
-    //   ]);
-    //   mockedConsole.mockRestore();
-    //   delete window.gtmControllerDebug; // not sure why this isn't working in the global beforeEach
-    //   done();
-    // });
-
     iframe.focus();
     window.dispatchEvent(new Event('blur'));
   });

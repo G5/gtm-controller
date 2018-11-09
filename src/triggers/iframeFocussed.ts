@@ -8,47 +8,48 @@ interface IIframeWhitelistConfig {
 
 class IframeFocusTrigger extends Trigger {
 
+  private iframeClickedLast: boolean;
   private whitelist: WhitelistParser;
 
   constructor({ whitelist: { iframe: iframeWhitelistRules = [] } }: IIframeWhitelistConfig) {
     super();
-    let iframeClickedLast = false;
+    this.iframeClickedLast = false;
     this.whitelist = new WhitelistParser(iframeWhitelistRules);
-
-    const windowBlurred = () => {
-      setTimeout(() => {
-        const { activeElement } = document;
-
-        if (activeElement instanceof HTMLIFrameElement) {
-          iframeClickedLast = true;
-          const src = activeElement.src || 'no src available';
-          const data = {
-            event: 'custom.event.iframeClicked',
-            whitelisted: this.whitelist.matches(src),
-            lastClickedIframeSrc: src,
-            lastClickedIframeIdOrClass: activeElement.id
-              ? 'id: ' + activeElement.id
-              : activeElement.className
-                ? 'class: ' + activeElement.className
-                : 'no id or class name available'
-          };
-
-          if (Constants.debugging) {
-            console.log('Clicked iframe src:', src, 'Element:', activeElement);
-          }
-
-          this.fireSubscriptions(data);
-        }
-      }, 100);
-    };
-
-    const windowFocussed = () => {
-      iframeClickedLast = iframeClickedLast ? false : true;
-    };
-
-    window.addEventListener('focus', windowFocussed, true);
-    window.addEventListener('blur', windowBlurred, true);
+    window.addEventListener('focus', this.windowFocussed.bind(this), true);
+    window.addEventListener('blur', this.windowBlurred.bind(this), true);
   }
+
+  private windowBlurred() {
+    setTimeout(() => {
+      const { activeElement } = document;
+
+      if (activeElement instanceof HTMLIFrameElement) {
+        this.iframeClickedLast = true;
+        const src = activeElement.src || 'no src available';
+        const data = {
+          event: 'custom.event.iframeClicked',
+          whitelisted: this.whitelist.matches(src),
+          lastClickedIframeSrc: src,
+          lastClickedIframeIdOrClass: activeElement.id
+            ? 'id: ' + activeElement.id
+            : activeElement.className
+              ? 'class: ' + activeElement.className
+              : 'no id or class name available'
+        };
+
+        if (Constants.debugging) {
+          console.log('Clicked iframe src:', src, 'Element:', activeElement);
+        }
+
+        this.fireSubscriptions(data);
+      }
+    }, 100);
+  }
+
+  private windowFocussed() {
+    this.iframeClickedLast = !this.iframeClickedLast;
+  }
+
 }
 
 export default IframeFocusTrigger;
