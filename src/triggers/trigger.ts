@@ -1,18 +1,34 @@
 
-type AnyFunction = () => void;
+export type Observer = (data?: any) => void;
 
 export default class Trigger {
-  protected listeners: AnyFunction[];
+  private privateSubscriptions: Observer[];
 
   constructor() {
-    this.listeners = [];
+    this.privateSubscriptions = [];
   }
 
-  public subscribe(callback: AnyFunction) {
-    this.listeners.push(callback);
+  public get subscriptions(): Observer[] {
+    return this.privateSubscriptions;
   }
 
-  protected fireListeners(data: any) {
-    this.listeners.forEach(listener => listener.call(null, data));
+  public subscribe(callback: Observer): boolean {
+    const subscribed = this.privateSubscriptions.includes(callback);
+    if (!subscribed) {
+      this.privateSubscriptions.push(callback);
+    }
+    return !subscribed;
+  }
+
+  public unsubscribe(callback: Observer) {
+    this.privateSubscriptions = this.privateSubscriptions.filter(fn => fn !== callback);
+  }
+
+  public clearSubscriptions() {
+    this.privateSubscriptions = [];
+  }
+
+  protected fireSubscriptions(data: any) {
+    this.privateSubscriptions.forEach(listener => listener.call(null, data));
   }
 }
