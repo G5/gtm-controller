@@ -1,7 +1,7 @@
 
 export type Observer = (data?: any) => void;
 
-export default class Trigger {
+export default class Trigger<SubscriptionDataType> {
   private privateSubscriptions: Observer[];
 
   constructor() {
@@ -28,7 +28,7 @@ export default class Trigger {
     this.privateSubscriptions = [];
   }
 
-  protected fireSubscriptions(data: any) {
+  protected fireSubscriptions(data: SubscriptionDataType) {
     this.privateSubscriptions.forEach(listener => listener.call(null, data));
   }
 }

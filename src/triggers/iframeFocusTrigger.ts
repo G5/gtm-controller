@@ -1,22 +1,37 @@
+import { DI } from "jack-of-all-decorators";
+import IGlobalConfig from '../core/IGlobalConfig';
 import WhitelistParser from '../helpers/whitelistParser';
 import Constants from '../variables/constants';
 import Trigger from './trigger';
 
-interface IIframeWhitelistConfig {
-  whitelist: { iframe?: string[] };
+export interface IFrameFocusData {
+  event: string;
+  whitelisted: boolean;
+  lastClickedIframeSrc: string;
+  lastClickedIframeIdOrClass: string;
 }
 
-class IframeFocusTrigger extends Trigger {
-
+@DI.Injectable()
+class IframeFocusTrigger extends Trigger<IFrameFocusData> implements DI.IInjectable {
   private iframeClickedLast: boolean;
   private whitelist: WhitelistParser;
+  private windowFocussedEvent: () => void;
+  private windowBlurredEvent: () => void;
 
-  constructor({ whitelist: { iframe: iframeWhitelistRules = [] } }: IIframeWhitelistConfig) {
+  constructor(config: IGlobalConfig) {
     super();
     this.iframeClickedLast = false;
+    const iframeWhitelistRules = config.whitelist ? config.whitelist.iframe || [] : [];
     this.whitelist = new WhitelistParser(iframeWhitelistRules);
-    window.addEventListener('focus', this.windowFocussed.bind(this), true);
-    window.addEventListener('blur', this.windowBlurred.bind(this), true);
+    this.windowFocussedEvent = this.windowFocussed.bind(this);
+    this.windowBlurredEvent = this.windowBlurred.bind(this);
+    window.addEventListener('focus', this.windowFocussedEvent, true);
+    window.addEventListener('blur', this.windowBlurredEvent, true);
+  }
+
+  public destruct(): void {
+    window.removeEventListener('focus', this.windowFocussedEvent, true);
+    window.removeEventListener('blur', this.windowBlurredEvent, true);
   }
 
   private windowBlurred() {
@@ -37,11 +52,11 @@ class IframeFocusTrigger extends Trigger {
               : 'no id or class name available'
         };
 
+        this.fireSubscriptions(data);
+
         if (Constants.debugging) {
           console.log('Clicked iframe src:', src, 'Element:', activeElement);
         }
-
-        this.fireSubscriptions(data);
       }
     }, 100);
   }
