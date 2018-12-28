@@ -22,8 +22,8 @@ indent_style = tab
 indent_style = tab
 indent_size = 2
 
-# Markdown Files
-[*.md]
+# 2 Spacers
+[*.{md,json}]
 indent_style = space
 indent_size = 2
 
