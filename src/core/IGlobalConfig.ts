@@ -1,4 +1,5 @@
+import IStringMap from 'src/interfaces/IStringMap';
 
 export default interface IGlobalConfig {
-  whitelist: { [key: string]: string[] };
+  whitelist?: IStringMap;
 }
