@@ -1,48 +1,19 @@
 import escapeRegex from 'lodash.escaperegexp';
+import URL from './Url';
 
 export default class RuleParser {
   public static parseRules(whitelistRules: string[]): RegExp[] {
     return whitelistRules.map(rule => {
       // replace escaped placeholders to wildcards
       const wildCharactersMatcher = /\\\{\\\{[^\\\}]*\\}\\}/g;
-      let cleansed = escapeRegex(rule).replace(wildCharactersMatcher, '.*');
-      cleansed = this.optionalTrailingForwardSlash(cleansed);
-      return new RegExp(cleansed);
+      const cleansed = escapeRegex(rule).replace(wildCharactersMatcher, '.*');
+      return this.optionalTrailingForwardSlash(new URL(cleansed));
     });
   }
 
-  private static hasQueryOrHash(url: string) {
-    const queryIndex = url.indexOf('\\?');
-    const hashIndex = url.indexOf('#');
-    return {
-      query: queryIndex > -1,
-      queryIndex,
-      hash: hashIndex > -1,
-      hashIndex
-    };
-  }
-
-  private static firstQueryOrHashIndex(url: string) {
-    const { query, queryIndex, hash, hashIndex } = this.hasQueryOrHash(url);
-    let index = -1;
-
-    if (query || hash) {
-      if (query && hash) {
-        // Which occurs first
-        index = Math.min(queryIndex, hashIndex);
-      }
-      else {
-        // It only has one or the other
-        index = query ? queryIndex : hashIndex;
-      }
-    }
-
-    return index;
-  }
-
-  private static optionalTrailingForwardSlash(url: string) {
-    const queryHashIndex = this.firstQueryOrHashIndex(url);
-    let workingString = url;
+  private static optionalTrailingForwardSlash(url: URL): RegExp {
+    const queryHashIndex = url.firstQueryOrHashIndex();
+    let workingString = url.url;
 
     if (queryHashIndex > -1) {
       workingString = workingString.substring(0, queryHashIndex);
@@ -50,12 +21,12 @@ export default class RuleParser {
 
     const lastChar = workingString.slice(-1);
     if (lastChar === '/') {
-      url =
-        url.slice(0, workingString.length) +
+      workingString =
+        workingString.slice(0, workingString.length) +
         '?' +
-        url.slice(workingString.length);
+        workingString.slice(workingString.length);
     }
 
-    return url;
+    return new RegExp(workingString);
   }
 }
