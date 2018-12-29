@@ -5,7 +5,6 @@ export default class URL {
 
   }
 
-  @memoize
   public queryOrHash() {
     const queryIndex = this.url.indexOf('\\?');
     const hashIndex = this.url.indexOf('#');
@@ -17,12 +16,10 @@ export default class URL {
     };
   }
 
-  @memoize
   public hasQueryOrHash(): boolean {
     return this.firstQueryOrHashIndex() > -1;
   }
 
-  @memoize
   public firstQueryOrHashIndex() {
     const { query, queryIndex, hash, hashIndex } = this.queryOrHash();
     let index = -1;
