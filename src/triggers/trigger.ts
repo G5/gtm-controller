@@ -1,18 +1,18 @@
 
-export type Observer<DataType> = (data?: DataType) => void;
+export type Subscriber<DataType> = (data: DataType) => void;
 
 export default class Trigger<DataType> {
-  private privateSubscriptions: Array<Observer<DataType>>;
+  private privateSubscriptions: Array<Subscriber<DataType>>;
 
   constructor() {
     this.privateSubscriptions = [];
   }
 
-  public get subscriptions(): Array<Observer<DataType>> {
+  public get subscriptions(): Array<Subscriber<DataType>> {
     return this.privateSubscriptions;
   }
 
-  public subscribe(callback: Observer<DataType> ): boolean {
+  public subscribe(callback: Subscriber<DataType> ): boolean {
     const subscribed = this.privateSubscriptions.includes(callback);
     if (!subscribed) {
       this.privateSubscriptions.push(callback);
@@ -20,7 +20,7 @@ export default class Trigger<DataType> {
     return !subscribed;
   }
 
-  public unsubscribe(callback: Observer<DataType> ) {
+  public unsubscribe(callback: Subscriber<DataType> ) {
     this.privateSubscriptions = this.privateSubscriptions.filter(fn => fn !== callback);
   }
 

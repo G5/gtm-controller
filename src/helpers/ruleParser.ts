@@ -12,8 +12,9 @@ export default class RuleParser {
   }
 
   private static optionalTrailingForwardSlash(url: URL): RegExp {
-    const queryHashIndex = url.firstQueryOrHashIndex();
+    const queryHashIndex = url.firstQueryOrHashIndex(true);
     let workingString = url.url;
+    let returnUrl = workingString;
 
     if (queryHashIndex > -1) {
       workingString = workingString.substring(0, queryHashIndex);
@@ -21,12 +22,12 @@ export default class RuleParser {
 
     const lastChar = workingString.slice(-1);
     if (lastChar === '/') {
-      workingString =
-        workingString.slice(0, workingString.length) +
+      returnUrl =
+        returnUrl.slice(0, workingString.length) +
         '?' +
-        workingString.slice(workingString.length);
+        returnUrl.slice(workingString.length);
     }
 
-    return new RegExp(workingString);
+    return new RegExp(returnUrl);
   }
 }

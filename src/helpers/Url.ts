@@ -1,12 +1,10 @@
-import { memoize } from "jack-of-all-decorators";
-
 export default class URL {
   constructor(public url: string) {
 
   }
 
   public queryOrHash() {
-    const queryIndex = this.url.indexOf('\\?');
+    const queryIndex = this.url.indexOf('?');
     const hashIndex = this.url.indexOf('#');
     return {
       query: queryIndex > -1,
@@ -20,8 +18,11 @@ export default class URL {
     return this.firstQueryOrHashIndex() > -1;
   }
 
-  public firstQueryOrHashIndex() {
-    const { query, queryIndex, hash, hashIndex } = this.queryOrHash();
+  public firstQueryOrHashIndex(regex = false) {
+    const queryOrHash = this.queryOrHash();
+    const { query, hash, hashIndex } = queryOrHash;
+    let { queryIndex } = queryOrHash;
+    queryIndex -= regex ? 1 : 0;
     let index = -1;
 
     if (query || hash) {

@@ -1,10 +1,10 @@
-import IStringMap from "src/interfaces/iStringMap";
-import Constants from "src/variables/constants";
+import IStringMap from "../interfaces/iStringMap";
+import Constants from "../variables/constants";
 
 const { dataLayer: DL } = Constants;
 
 class DataLayer {
-  public static push(...args: any): number {
+  public static push(...args: IStringMap[]): number {
     DL.push(...args);
     if (Constants.debugging) {
       console.log(...args);
@@ -27,7 +27,7 @@ class DataLayer {
    * @returns {(IStringMap[]|IStringMap)}
    */
   public static get(index: number|string): IStringMap[]|IStringMap {
-    return (typeof index === 'number') ? this.all[index] : this.values[name];
+    return (typeof index === 'number') ? this.all[index] : this.values[index];
   }
 
   public static get first(): any {
