@@ -1,7 +1,9 @@
+import IStringMap from "src/interfaces/iStringMap";
+
 declare global {
   // @ts-ignore
   interface Window {
-    dataLayer: any[]|undefined;
+    dataLayer: IStringMap[]|undefined;
     gtmControllerDebug: boolean;
   }
 }

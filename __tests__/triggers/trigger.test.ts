@@ -1,6 +1,10 @@
 import Trigger from '../../src/triggers/trigger';
 
-class ExtendsTrigger extends Trigger {
+interface ITriggerData {
+  information: string;
+}
+
+class ExtendsTrigger extends Trigger<ITriggerData> {
   public somethingImportant(data: any) {
     this.fireSubscriptions(data);
   }
@@ -29,11 +33,13 @@ describe('Extends Trigger with Multiple Subscriptions', () => {
   test('Called when fired', () => {
     triggerable.somethingImportant(data);
     expect(func1).lastCalledWith(data);
+    expect(func2).lastCalledWith(data);
   });
-  test('Can unsubscribe and does not get called', () => {
+  test('Can unsubscribe and only remaining subscriptions are called', () => {
     triggerable.unsubscribe(func1);
     triggerable.somethingImportant(data);
     expect(func1).not.toBeCalled();
+    expect(func2).toBeCalled();
   });
   test('Cannot subscribe more than once with same observer', () => {
     expect(triggerable.subscribe(func1)).toEqual(false);
